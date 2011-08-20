@@ -8,37 +8,37 @@
     </div>
     <? endforeach;?>
 <? endif; ?>
+<div id="zip-code-form" class="wrap">
 
+    <div id="icon-edit-pages" class="icon32"></div><h2><?= $is_new ? "Create New Splash Page" : "Edit Splash Page" ?></h2>
 
-<h2><?= $is_new ? "Create New Splash Page" : "Edit Splash Page" ?></h2>
+    <div id="" class="metabox-holder">
 
-<div id="" class="metabox-holder">
-
-    <form action="" method="post" accept-charset="utf-8">
-        <? if (!$is_new):?>
-            <input type="hidden" name="splash_page_id" value="<?=$_REQUEST['splash_page_id']?>" />
-        <? endif; ?>
-        <div id="title-div">
-            <div id="titlewrap" class="inputwrap">
-                <label class="hide-if-no-js"  id="title-prompt-text" for="title">Splash Page Title</label>
-                <input type="text" name="title" size="30" tabindex="1" value="<?=$values['title']?>" id="title" autocomplete="off"/>
+        <form action="" method="post" accept-charset="utf-8">
+            <? if (!$is_new):?>
+                <input type="hidden" name="splash_page_id" value="<?=$_REQUEST['splash_page_id']?>" />
+            <? endif; ?>
+            <div id="title-div">
+                <div id="titlewrap" class="inputwrap">
+                    <label class="hide-if-no-js"  id="title-prompt-text" for="title">Splash Page Title</label>
+                    <input type="text" name="title" size="30" tabindex="1" value="<?=$values['title']?>" id="title" autocomplete="off" onfocus="this.value = this.value;"/>
+                </div>
             </div>
-        </div>
         
-        <div id="urlwrap" class="inputwrap">
-            <label class="hide-if-no-js"  id="url-prompt-text" for="url">URL to Redirect To</label>
-            <input type="text" name="url" size="30" tabindex="2" value="<?=$values['url']?>" id="url" autocomplete="off"/>
-        </div>
+            <div id="urlwrap" class="inputwrap">
+                <label class="hide-if-no-js"  id="url-prompt-text" for="url">URL to Redirect To</label>
+                <input type="text" name="url" size="30" tabindex="2" value="<?=$values['url']?>" id="url" autocomplete="off" onfocus="this.value = this.value;"/>
+            </div>
     
-        <div id="zipcodewrap" class="inputwrap">
-            <label class="hide-if-no-js"  id="zipcode-prompt-text" for="url">Zipcode</label>
-            <input type="text" name="zipcode" size="5" tabindex="3" value="<?=$values['zipcode']?>" id="zipcode" autocomplete="off" />
-        </div>
+            <div id="zipcodewrap" class="inputwrap">
+                <label class="hide-if-no-js"  id="zipcode-prompt-text" for="url">Zipcode</label>
+                <input type="text" name="zipcode" size="5" tabindex="3" value="<?=$values['zipcode']?>" id="zipcode" autocomplete="off" onfocus="this.value = this.value;" />
+            </div>
         
-        <p><a href="<?=$list_link?>" class="button-secondary"> Back </a> &nbsp; &nbsp; <input type="submit" class="button-secondary" value="Submit"></p>
-    </form>
+            <p><input type="submit" class="button-primary" value="Submit"> &nbsp; &nbsp; <a href="<?=$list_link?>" class="button-secondary"> Back </a></p>
+        </form>
+    </div>
 </div>
-
 <style>
 .inputwrap label { width:100%; display:block; clear:both; margin-bottom:10px;}
 .inputwrap input,

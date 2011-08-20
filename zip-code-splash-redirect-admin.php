@@ -16,7 +16,7 @@ if (!defined('WP_PLUGIN_URL')) define('WP_PLUGIN_URL', WP_CONTENT_URL . '/plugin
 add_action('admin_menu', 'zip_code_splash_redirect_admin_actions');
 //register javascript
 wp_register_script( 'zip_code_splash_redirect_script', plugins_url('/js/plugin.js', __FILE__) );
-
+wp_enqueue_script( 'zip_code_splash_redirect_script');
 
 /**
  * 
@@ -30,7 +30,7 @@ function zip_code_splash_redirect_admin_actions()
     add_action( 'admin_menu', 'zip_code_splash_redirect_admin' );
 
     if ( function_exists('add_submenu_page') )
-		add_submenu_page('plugins.php', __($title), __($title), 'manage_options', 'zip_code_splash_redirect_admin', 'zip_code_splash_redirect_admin');
+		add_submenu_page('options-general.php', __($title), __($title), 'manage_options', 'zip_code_splash_redirect_admin', 'zip_code_splash_redirect_admin');
 }   
 
 
@@ -126,16 +126,30 @@ function validate_zip_code_form_submission() {
         $title = $_POST['title'];
         $url = $_POST['url'];
         $zipcode = $_POST['zipcode'];
-        
+        $splash_page_id = $_POST['splash_page_id'];
         $has_title   = strlen($title) > 0;
         $has_url     = strlen($url) > 0;
         $has_zipcode = strlen($zipcode) == 5;
         $is_valid_url = (bool)preg_match("/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i", $url);
         $is_valid_zipcode = (bool)preg_match('/^([0-9]{5}(?:-[0-9]{4})?)*$/', $zipcode);
 
-        $number_of_zipcodes = $wpdb->get_var("SELECT COUNT(*) FROM $splash_pages_table_name WHERE zipcode = $zipcode");
-    
-        $is_unique_zipcode = $number_of_zipcodes == 0;
+        //if it's a new record, there should be 0 zip codes existing
+        if (empty($splash_page_id)) {
+            $number_of_zipcodes = $wpdb->get_var("SELECT COUNT(*) FROM $splash_pages_table_name WHERE zipcode = $zipcode");
+
+            $is_unique_zipcode = $number_of_zipcodes == 0;
+            
+        } else {
+            $number_of_zipcodes = $wpdb->get_var("SELECT COUNT(*) FROM $splash_pages_table_name WHERE zipcode = $zipcode");
+            $current_page = $wpdb->get_row($wpdb->prepare("SELECT *
+                                                    FROM $splash_pages_table_name 
+                                                    WHERE id = %d",$splash_page_id));
+            if (sizeof($current_page) == 1) {
+                $is_unique_zipcode = ($number_of_zipcodes == 1 && $current_page->zipcode == $zipcode) || $number_of_zipcodes == 0;
+            } else {
+                $is_unique_zipcode = ($number_of_zipcodes == 0);
+            }
+        }
         
         if (!$has_title)
             $_SESSION['flash_messages'][] = "Title is required.";
@@ -205,6 +219,7 @@ function update_splash_page_and_zip_code_records() {
     $values = zip_code_form_submission_values();
 
     $id = $values['id'];     unset($values['id']);
+
     if($wpdb->update( $splash_pages_table_name, $values, array('id'=>$id))) {
         $_SESSION['flash_messages'][] = "Splash Page Updated.";
         return true;
@@ -243,18 +258,18 @@ function zip_code_form_submission_values() {
     if ($_REQUEST['action'] == "form" && $_GET['splash_page_id'] && !$_POST) {
         //get a record
         $id = $_GET['splash_page_id'];
-        return $wpdb->get_row("SELECT * FROM $splash_pages_table_name WHERE id = $id", ARRAY_A);
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $splash_pages_table_name WHERE id = %d",$id), ARRAY_A);
         
     } elseif ($_REQUEST['action'] == "form" && $_POST['splash_page_id']) {
         //update a record
         return  array('id'    => $_POST['splash_page_id'],
-                     'title' => $_POST['title'],
+                     'title' => str_replace("\'","'",$_POST['title']),
                      'url'   => $_POST['url'],
                      'zipcode' => $_POST['zipcode']);
         
     } elseif ($_REQUEST['action'] == "form" && $_POST) {
         //create a record
-        return array('title' => $_POST['title'],
+        return array('title' => str_replace("\'","'",$_POST['title']),
                      'url'   => $_POST['url'],
                      'zipcode' => $_POST['zipcode']);
         
@@ -288,6 +303,9 @@ if ($_POST) {
             $updated = update_splash_page_and_zip_code_records();
             if($updated) {
                 wp_redirect($list_link, $status );
+                exit;
+            } else {
+                wp_redirect($form_link."&splash_page_id=".$_REQUEST['splash_page_id']);
                 exit;
             }
             

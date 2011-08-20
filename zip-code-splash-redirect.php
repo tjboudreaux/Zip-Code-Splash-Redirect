@@ -2,25 +2,24 @@
 /*
 Plugin Name: Zip Code Splash Redirect
 Plugin URI: http://www.travisboudreaux.com
-Description: This plugin is used to create a theme with a form that has a zipcode field,
-and queries a database to find a url to redirect to based on the zipcode.
-Version: 1.0
+Description: This plugin is used to create a theme with a form that has a zipcode field,and queries a database to find a url to redirect to based on the zipcode.
+Version: 1.0.1
 Author: Travis Boudreaux <travis@travisboudreaux.com>
 Author URI: http://www.travisboudreaux.com
 
 */
 
 //plugin version number
-$zip_code_splash_redirect_version = "1.0";
+$zip_code_splash_redirect_version = "1.0.1";
 
 //database table names
 global $wpdb,$splash_pages_table_name,$zip_codes_table_name;
 $splash_pages_table_name = $wpdb->prefix . "zip_code_splash_redirect_splash_pages"; 
 $zip_codes_table_name = $wpdb->prefix . "zip_code_splash_redirect_zip_codes"; 
 
-$list_link = site_url()."/wp-admin/plugins.php?page=zip_code_splash_redirect_admin&action=list";
-$form_link = site_url()."/wp-admin/plugins.php?page=zip_code_splash_redirect_admin&action=form"; 
-$delete_link = site_url()."/wp-admin/plugins.php?page=zip_code_splash_redirect_admin&action=delete"; 
+$list_link = site_url()."/wp-admin/options-general.php?page=zip_code_splash_redirect_admin&action=list";
+$form_link = site_url()."/wp-admin/options-general.php?page=zip_code_splash_redirect_admin&action=form"; 
+$delete_link = site_url()."/wp-admin/options-general.php?page=zip_code_splash_redirect_admin&action=delete"; 
 
 //clear flash messages array each time.
 $_SESSION['zipcode_flash_messages_front'] = array();
