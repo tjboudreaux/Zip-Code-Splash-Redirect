@@ -1,11 +1,23 @@
 <? $is_new = !isset($_REQUEST['splash_page_id']) ?>
 <? $values =  zip_code_form_submission_values(); ?>
+
+<? if (count($_SESSION['flash_messages']) > 0) : ?>
+    <? foreach ($_SESSION['flash_messages'] as $message):?>
+    <div id="zip-code-splash-page-message" class="updated fade">
+        <?=$message?>
+    </div>
+    <? endforeach;?>
+<? endif; ?>
+
+
 <h2><?= $is_new ? "Create New Splash Page" : "Edit Splash Page" ?></h2>
 
 <div id="" class="metabox-holder">
 
     <form action="" method="post" accept-charset="utf-8">
-    
+        <? if (!$is_new):?>
+            <input type="hidden" name="splash_page_id" value="<?=$_REQUEST['splash_page_id']?>" />
+        <? endif; ?>
         <div id="title-div">
             <div id="titlewrap" class="inputwrap">
                 <label class="hide-if-no-js"  id="title-prompt-text" for="title">Splash Page Title</label>
@@ -15,15 +27,15 @@
         
         <div id="urlwrap" class="inputwrap">
             <label class="hide-if-no-js"  id="url-prompt-text" for="url">URL to Redirect To</label>
-            <input type="text" name="url" size="30" tabindex="1" value="<?=$values['url']?>" id="url" autocomplete="off"/>
+            <input type="text" name="url" size="30" tabindex="2" value="<?=$values['url']?>" id="url" autocomplete="off"/>
         </div>
     
         <div id="zipcodewrap" class="inputwrap">
-            <label class="hide-if-no-js"  id="url-prompt-text" for="url">Zipcodes</label>
-            <textarea name="zipcodes"><?=$values['zipcodes']?></textarea>
+            <label class="hide-if-no-js"  id="zipcode-prompt-text" for="url">Zipcode</label>
+            <input type="text" name="zipcode" size="5" tabindex="3" value="<?=$values['zipcode']?>" id="zipcode" autocomplete="off" />
         </div>
         
-        <p><input type="submit" value="Submit &rarr;"></p>
+        <p><a href="<?=$list_link?>" class="button-secondary"> Back </a> &nbsp; &nbsp; <input type="submit" class="button-secondary" value="Submit"></p>
     </form>
 </div>
 

@@ -1,36 +1,58 @@
-<h1>List View</h1>
-<? $results = zip_code_paginated_records();?>
+<? if (count($_SESSION['flash_messages']) > 0) : ?>
+    <? foreach ($_SESSION['flash_messages'] as $message):?>
+    <div id="zip-code-splash-page-message" class="updated fade">
+        <?=$message?>
+    </div>
+    <? endforeach;?>
+<? endif; ?>
+<div class="wrap">
+
+<h2>Splash Pages</h2>
+<? $results = splash_page_paginated_records(); ?>
 <? $pag = $results['pagination'] ?>
 <? $records = $results['results'] ?>
-<? if (sizeof($records) > 0) : ?>
-<div class="tablenav">
+<? $has_records = (sizeof($records) > 0); ?>
+
+<div class="tablenav" style="width:99%;">
     <div class="alignleft actions">
-        <input type="submit" class="button-secondary" value="Bulk Delete" />
+        <a href="<?=$form_link?>" class="button-secondary"> Create </a>
     </div>
-    <div class="tablenav-pages">
-        <span class="displaying-num"><?php echo $results['pagination_count']; ?> items</span>
-        <?php $pag->show(); ?>
+    <div c lass="tablenav-pages">
+        <span class="displaying-num"><?=$results['pagination_count']; ?> items</span>
+        <? if ($has_records) : ?>
+            <? $pag->show(); ?>
+        <? endif; ?>
     </div>
 </div>
 
-<table class="wp-list-table widefat fixed pages" cellspacing="0">
+<table class="wp-list-table widefat fixed pages" cellspacing="0" style="width:99%;">
     <thead>
         <tr>
             <td>Redirect To</td>
             <td>URL</td>
-            <td>Zip Codes</td>
+            <td>Zip Code</td>
+            <td>Actions</td>
         </tr>
     </thead>
-        
     <tbody>
-        <?foreach ($records as $record) : ?>
+        <? if ($has_records) : ?>
+            <?foreach ($records as $record) : ?>
+                <tr>
+                    <td><a href="<?=site_url()?>/wp-admin/plugins.php?page=zip_code_splash_redirect_admin&action=form"><?=$record->title ?></a>
+                        
+                    </td>
+                    <td><?=$record->url ?></td>
+                    <td><?=$record->zipcode ?></td>
+                    <td><a href="<?=$form_link?>&splash_page_id=<?=$record->id?>">Edit</a> |
+                        <a href="<?=$delete_link?>&splash_page_id=<?=$record->id?>" class="delete">Delete</a>
+                    </td>
+                </tr>
+            <?endforeach;?>
+        <? else: ?>
             <tr>
-                <td><a href="<?=site_url()?>/wp-admin/plugins.php?page=zip_code_splash_redirect_admin&action=form"><?=$record->title ?></a></td>
-                <td><?=$record->url ?></td>
-                <td><?=$record->zipcodes ?></td>
+                <td colspan="3" style="text-align:center">No splash pages exist. Would you like to <a href="<?=$form_link?>">create one?</a></td>
             </tr>
-        <?endforeach;?>
+        <? endif; ?>
     </tbody>
 </table>
-
-<? endif; ?>
+</div>
