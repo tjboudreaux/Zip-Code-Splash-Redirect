@@ -1,16 +1,16 @@
-<? $results = splash_page_paginated_records(); ?>
-<? $pag = $results['pagination'] ?>
-<? $records = $results['results'] ?>
-<? $has_records = (sizeof($records) > 0); ?>
+<?php  $results = splash_page_paginated_records(); ?>
+<?php  $pag = $results['pagination'] ?>
+<?php  $records = $results['results'] ?>
+<?php  $has_records = (sizeof($records) > 0); ?>
 
 
-<? if (count($_SESSION['flash_messages']) > 0) : ?>
-    <? foreach ($_SESSION['flash_messages'] as $message):?>
+<?php  if (count($_SESSION['flash_messages']) > 0) : ?>
+    <?php  foreach ($_SESSION['flash_messages'] as $message):?>
     <div id="zip-code-splash-page-message" class="updated fade">
-        <?=$message?>
+        <?php echo $message?>
     </div>
-    <? endforeach;?>
-<? endif; ?>
+    <?php  endforeach;?>
+<?php  endif; ?>
 
 
 <div class="wrap">
@@ -19,13 +19,13 @@
 
     <div class="tablenav" style="width:99%;">
         <div class="alignleft actions">
-            <a href="<?=$form_link?>" class="button-secondary"> Create </a>
+            <a href="<?php echo $form_link?>" class="button-secondary"> Create </a>
         </div>
         <div class="tablenav-pages">
-            <span class="displaying-num"><?=$results['pagination_count']; ?> items</span>
-            <? if ($has_records) : ?>
-                <? $pag->show(); ?>
-            <? endif; ?>
+            <span class="displaying-num"><?php echo $results['pagination_count']; ?> items</span>
+            <?php  if ($has_records) : ?>
+                <?php  $pag->show(); ?>
+            <?php  endif; ?>
         </div>
     </div>
 
@@ -39,25 +39,25 @@
             </tr>
         </thead>
         <tbody>
-            <? if ($has_records) : ?>
-                <?foreach ($records as $record) : ?>
-                    <? $edit_link = "$form_link&splash_page_id={$record->id}";?>
+            <?php  if ($has_records) : ?>
+                <?php foreach ($records as $record) : ?>
+                    <?php  $edit_link = "$form_link&splash_page_id={$record->id}";?>
                     <tr>
-                        <td><a href="<?=$edit_link?>"><?=$record->title ?></a>
+                        <td><a href="<?php echo $edit_link?>"><?php echo $record->title ?></a>
                         
                         </td>
-                        <td><?=$record->url ?></td>
-                        <td><?=$record->zipcode ?></td>
-                        <td><a href="<?=$edit_link?>?>">Edit</a> |
-                            <a href="<?=$delete_link?>&splash_page_id=<?=$record->id?>" class="delete">Delete</a>
+                        <td><?php echo $record->url ?></td>
+                        <td><?php echo $record->zipcode ?></td>
+                        <td><a href="<?php echo $edit_link?>?>">Edit</a> |
+                            <a href="<?php echo $delete_link?>&splash_page_id=<?php echo $record->id?>" class="delete">Delete</a>
                         </td>
                     </tr>
-                <?endforeach;?>
-            <? else: ?>
+                <?php endforeach;?>
+            <?php  else: ?>
                 <tr>
-                    <td colspan="3" style="text-align:center">No splash pages exist. Would you like to <a href="<?=$form_link?>">create one?</a></td>
+                    <td colspan="3" style="text-align:center">No splash pages exist. Would you like to <a href="<?php echo $form_link?>">create one?</a></td>
                 </tr>
-            <? endif; ?>
+            <?php  endif; ?>
         </tbody>
     </table>
 </div>

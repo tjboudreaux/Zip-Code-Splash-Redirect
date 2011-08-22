@@ -1,4 +1,4 @@
-<?
+<?php
 class pagination {
     /**
      *  Script Name: WP Style Pagination Class
