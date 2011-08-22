@@ -3,14 +3,14 @@
 Plugin Name: Zip Code Splash Redirect
 Plugin URI: http://www.travisboudreaux.com
 Description: This plugin is used to create a theme with a form that has a zipcode field,and queries a database to find a url to redirect to based on the zipcode.
-Version: 1.0.1
+Version: 1.0.2
 Author: Travis Boudreaux <travis@travisboudreaux.com>
 Author URI: http://www.travisboudreaux.com
 
 */
 
 //plugin version number
-$zip_code_splash_redirect_version = "1.0.1";
+$zip_code_splash_redirect_version = "1.0.2";
 
 //database table names
 global $wpdb,$splash_pages_table_name,$zip_codes_table_name;
